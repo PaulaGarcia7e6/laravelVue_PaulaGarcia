@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import axios from "axios";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 definePageMeta({
   layout: "centered",
@@ -20,6 +23,7 @@ async function register(payload:RegisterPayload) {
   try {
     const post = await axios.post('/register',payload )
     console.log('se han registrado estos datos',post)
+    router.push('/login');
   } catch(error){
     console.log(error)
   }

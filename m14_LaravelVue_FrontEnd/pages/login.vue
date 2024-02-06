@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 definePageMeta({
   layout: "centered",
@@ -14,7 +17,8 @@ const form = reactive({
 })
 async function login(payload:LoginPayload) {
   try {
-    const post = await axios.post('/login',payload )
+    const post = await axios.post('/login',payload)
+    router.push('/me');
     console.log('Se ha iniciado sesion',post)
   } catch(error){
     console.log(error)
