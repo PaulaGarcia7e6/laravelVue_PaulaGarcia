@@ -4,6 +4,10 @@
 </template>
 <script setup lang="ts">
 import axios from 'axios';
+import { useAuth } from '~~/composables/useAuth';
+definePageMeta({
+  middleware:['auth']
+})
 interface User {
   "name": string,
   "email": string,
@@ -12,6 +16,7 @@ let user:User = reactive({
   name:"",
   email:""
 });
+const auth = useAuth(); // Llamada a useAuth
 
 async function userData() {
   try {
@@ -28,3 +33,8 @@ onBeforeMount(async()=>{
   await userData()
 })
 </script>
+<!-- Arribats a aquest punt podem observar que  cada vegada que faig una petició a una pàgina protegida, 
+  estic cridant a initUser, per tant la petició axios es continua fent encara que ja hagi iniciat sessió. 
+  Com evitaries això? 
+CHATGPT nos recomienda que usemos el cache storege y solo guardemos datos cuando lo necesitemos
+-->

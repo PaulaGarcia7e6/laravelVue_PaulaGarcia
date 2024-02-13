@@ -6,6 +6,7 @@ const router = useRouter();
 
 definePageMeta({
   layout: "centered",
+  middleware:["guests"],
 });
 interface LoginPayload {
   "email": string,
@@ -15,15 +16,16 @@ const form = reactive({
   email: '',
   password: '',
 })
-async function login(payload:LoginPayload) {
-  try {
-    const post = await axios.post('/login',payload)
-    router.push('/me');
-    console.log('Se ha iniciado sesion',post)
-  } catch(error){
-    console.log(error)
-  }
-}
+const {login}=useAuth();  
+// async function login(payload:LoginPayload) {
+//   try {
+//     const post = await axios.post('/login',payload)
+//     router.push('/me');
+//     console.log('Se ha iniciado sesion',post)
+//   } catch(error){
+//     console.log(error)
+//   }
+// }
 </script>
 <template>
   <div class="login">

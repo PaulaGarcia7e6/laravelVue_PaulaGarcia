@@ -6,6 +6,7 @@ const router = useRouter();
 
 definePageMeta({
   layout: "centered",
+  middleware:["guests"],
 });
 const form = reactive({
   name: '',
@@ -19,15 +20,16 @@ interface RegisterPayload {
   "password": string,
   "password_confirmation":string
 }
-async function register(payload:RegisterPayload) {
-  try {
-    const post = await axios.post('/register',payload )
-    console.log('se han registrado estos datos',post)
-    router.push('/login');
-  } catch(error){
-    console.log(error)
-  }
-}
+// async function register(payload:RegisterPayload) {
+//   try {
+//     const post = await axios.post('/register',payload )
+//     console.log('se han registrado estos datos',post)
+//     router.push('/login');
+//   } catch(error){
+//     console.log(error)
+//   }
+// }
+const {register} = useAuth();
 </script>
 <template>
   <div class="register">

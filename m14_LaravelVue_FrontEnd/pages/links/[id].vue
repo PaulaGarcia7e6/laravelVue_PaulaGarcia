@@ -15,3 +15,8 @@
     <button class="btn">Update Link</button>
   </form>
 </template>
+<script setup lang="ts">
+definePageMeta({
+  middleware:['auth']
+})
+</script>

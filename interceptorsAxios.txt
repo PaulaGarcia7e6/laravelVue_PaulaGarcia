@@ -1,0 +1,11 @@
+De tornada al navegador i amb les developer tools en marxa, fes clic sobre My profile i torna a Links. Què observes? Quins codis d’error veus a la resposta de xarxa? Pots donar un raonament. (Afegeix un txt amb la teva explicació al lliurament del Classroom.)
+
+Aparentemente no hay ningun cambio visual en la pagina, en cuanto a la consola podemos observar un error de promesa: 
+Uncaught (in promise) 
+Object { stack: "AxiosError@http://localhost:3000/_nuxt/node_modules/.vite/deps/axios.js?v=4524929e: . . . 
+Con el error de red 401 que significaria sesion no autorizada. 
+Seguramente pasa esto por que hemos eliminado las sesiones activas que habian en la API y ya no detecta ningun usuario conectado. 
+
+Cerca informació i intenta donar una solució on aplicar un axios interceptor. En quin arxiu creus que hem d’aplicar el codi?
+
+En cuanto a en qué archivo al que se debe aplicar el código del interceptor Axios, generalmente se aplica en un archivo central de configuración de Axios, como axios.js o http.js. Este archivo es donde se configuran las opciones globales de Axios y se pueden agregar interceptores para manejar diferentes casos, como errores de autenticación.

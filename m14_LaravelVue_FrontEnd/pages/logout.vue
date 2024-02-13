@@ -7,14 +7,15 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-async function logout() {
-  try {
-    await axios.post('/logout');
-    console.log('test')
-    router.replace('/login');
-  } catch (error) {
-    console.error('Error al realizar el logout:', error);
-  }
-}
+// async function logout() {
+//   try {
+//     await axios.post('/logout');
+//     console.log('test')
+//     router.replace('/login');
+//   } catch (error) {
+//     console.error('Error al realizar el logout:', error);
+//   }
+// }
+const {logout} = useAuth()
 logout()
 </script>
