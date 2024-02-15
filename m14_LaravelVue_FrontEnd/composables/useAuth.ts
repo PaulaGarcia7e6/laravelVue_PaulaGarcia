@@ -1,25 +1,6 @@
 import axios from "axios";
-import { currentUser } from "~~/middleware/auth";
-interface LoginPayload {
-    email:string;
-    password:string
-}
-interface RegisterPayload {
-    "name": string,
-    "email": string,
-    "password": string,
-    "password_confirmation":string
-}
-interface User {
-    id:	2,
-    name:	string,
-    email:	string,
-    email_verified_at:	null,
-    two_factor_secret:	null,
-    two_factor_recovery_codes:	null,
-    created_at:	string,
-    updated_at:	string,
-}
+import {User,LoginPayload,RegisterPayload} from "@/types";
+
 export const useAuth=() => {
     //desar l'usuari connectat
     async function  login(payload:LoginPayload) {
