@@ -1,53 +1,55 @@
 <script setup lang="ts">
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
+import { ref, Ref } from 'vue';
+import { ErrorResponse, InvalidForm } from '~~/types';
+import { LoginPayload } from '~~/types';
+import type {FormKitNode} from "@formkit/core"
+import { AxiosError } from 'axios';
 
 definePageMeta({
   layout: "centered",
-  middleware:["guests"],
+  middleware: ["guests"],
 });
-interface LoginPayload {
-  "email": string,
-  "password": string,
+// const form = reactive({
+//   email: '',
+//   password: '',
+// })
+const { login } = useAuth();
+
+interface ErrorObject {
+  email: string[];
+  password: string[];
 }
-const form = reactive({
-  email: '',
-  password: '',
-})
-const {login}=useAuth();  
-// async function login(payload:LoginPayload) {
+async function handleLogin(payload:LoginPayload,node?:FormKitNode) {
+  try {
+    await login(payload)
+  } catch(err) {
+    InvalidForm(err,node)
+  }
+}
+// const errors: Ref<ErrorObject> = ref({
+//   email: [],
+//   password: []
+// });
+// async function verificaciologin() {
 //   try {
-//     const post = await axios.post('/login',payload)
-//     router.push('/me');
-//     console.log('Se ha iniciado sesion',post)
-//   } catch(error){
-//     console.log(error)
+//     await login(form)
+//   } catch (err) {
+//     console.log('he pasado por aqui', err.response)
+//     errors.value = err.response.data.errors
 //   }
 // }
 </script>
 <template>
   <div class="login">
     <h1>Login</h1>
-    <form @submit.prevent="login(form)">
-      <label>
-        <div>Email</div>
-        <input type="text" v-model="form.email"/>
-      </label>
-
-      <label>
-        <div>Password</div>
-        <input type="password" v-model="form.password"/>
-      </label>
-      <button class="btn">Login</button>
-    </form>
+    <FormKit type="form" submit-label="Login" @submit="handleLogin">
+      <FormKit label="Email" name="email" type="email" />
+      <FormKit label="Password" name="password" type="password" />
+    </FormKit>
 
     <p>
       Don't have an account?
-      <NuxtLink class="underline text-lime-600" to="/register"
-        >Register now!</NuxtLink
-      >
+      <NuxtLink class="underline text-lime-600" to="/register">Register now!</NuxtLink>
     </p>
   </div>
 </template>
