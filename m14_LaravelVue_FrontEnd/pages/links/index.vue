@@ -12,20 +12,23 @@ interface Link {
   views: number;
   id:number
 }
-const links = ref<Link[]>([]);
+const data = ref({});
 const page = ref(1);
 async function getLinks() {
   try {
-    links.value = await axios.get(`/links?page=${page.value}`);
-    console.log(links.value)
+    const response = await axios.get(`/links?page=${page.value}`);
+    data.value = response.data
+    console.log(data.value)
   } catch(err) {
     console.log('No ha funcionado')
   }
 }
-getLinks()
-watch(page, (newX) => {
-  getLinks()
+await getLinks()
+watch(page, async () => {
+  await getLinks()
 })
+let links = computed(()=>data.value.data);
+console.log(links.value.data)
 </script>
 <template>
   <div>
@@ -86,7 +89,7 @@ watch(page, (newX) => {
           </tr>
         </tbody>
       </table>
-      <TailwindPagination :data="links"
+      <TailwindPagination :data="data"
       @pagination-change-page="page=$event"/>
       <div class="mt-5 flex justify-center"></div>
     </div>
