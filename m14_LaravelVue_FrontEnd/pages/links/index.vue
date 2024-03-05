@@ -1,19 +1,15 @@
 <script setup lang="ts">
 import axios from 'axios';
 import {TailwindPagination} from "laravel-vue-pagination";
+import { ComputedRef } from 'nuxt/dist/app/compat/vue-demi';
+import { Link, PaginatedResponse } from '~~/types';
 
 axios.get("/links")
 definePageMeta({
   middleware:['auth']
 })
-interface Link {
-  full_link: string;
-  short_link: string;
-  views: number;
-  id:number
-}
-const data = ref({});
-const page = ref(1);
+const data = ref<PaginatedResponse<Link> | null>(null);
+const page = ref(useRoute().query.page || 1);
 async function getLinks() {
   try {
     const response = await axios.get(`/links?page=${page.value}`);
@@ -25,10 +21,11 @@ async function getLinks() {
 }
 await getLinks()
 watch(page, async () => {
-  await getLinks()
+  await getLinks();
+  page.value = useRoute().query.page
 })
-let links = computed(()=>data.value.data);
-console.log(links.value.data)
+let links = computed(()=>data.value?.data);
+
 </script>
 <template>
   <div>
