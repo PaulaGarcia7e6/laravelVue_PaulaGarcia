@@ -35,6 +35,7 @@ export interface Link {
     full_link:string;
     user_id:number;
     views: number;
+    id:number;
 }
 export interface ErrorResponse {
     message:string;
