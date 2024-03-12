@@ -2,38 +2,40 @@
 import axios from 'axios';
 import { TailwindPagination } from "laravel-vue-pagination";
 import { ComputedRef } from 'nuxt/dist/app/compat/vue-demi';
+import { useLinks } from '~~/composables/useLinks';
 import { Link, PaginatedResponse } from '~~/types';
 
 axios.get("/links")
 definePageMeta({
   middleware: ['auth']
 })
-const data = ref<PaginatedResponse<Link> | null>(null);
-// const page = ref(useRoute().query.page || 1);
+//const data = ref<PaginatedResponse<Link> | null>(null);
+  // const page = ref(useRoute().query.page || 1);
 const queries = ref({
   page: 1,
   sort: "",
   "filter[full_link]": "",
   ...useRoute().query,
 })
-async function getLinks() {
-  try {
-    //@ts-expect-error
-    const qs = new URLSearchParams(queries.value).toString();
-    const { data: res } = await axios.get(`/links?${qs}`);
-    data.value = res
-    console.log(data.value)
-  } catch (err) {
-    console.log('No ha funcionado')
-  }
-}
+
+//Refactorizacion pass 2
+// async function getLinks() {
+//   try {
+//     //@ts-expect-error
+//     const qs = new URLSearchParams(queries.value).toString();
+//     const { data: res } = await axios.get(`/links?${qs}`);
+//     data.value = res
+//     console.log(data.value)
+//   } catch (err) {
+//     console.log('No ha funcionado')
+//   }
+// }
+const {data,index:getLinks} = useLinks({queries})
 await getLinks()
-watch(queries, async () => {
-  await getLinks();
-  useRouter().push({ query: queries.value })
-  },
-  { deep: true }
-);
+watch(queries, 
+() => useRouter().push({ query: queries.value }),
+{ deep: true });
+
 let links = computed(() => data.value?.data);
 
 </script>
@@ -60,7 +62,7 @@ let links = computed(() => data.value?.data);
             <th class="w-[10%]">Edit</th>
             <th class="w-[10%]">Trash</th>
             <th class="w-[6%] text-center">
-              <button @click="getLinks">
+              <button @click="getLinks()">
                 <IconRefresh />
               </button>
             </th>
@@ -68,7 +70,7 @@ let links = computed(() => data.value?.data);
         </thead>
         <tbody>
           <tr v-for="link in links">
-            <td>
+            <td :title="`created ${useTimeAgo(link.created_at).value}`">
               <a :href="link.full_link" target="_blank">
                 {{ link.full_link.replace(/^http(s?):\/\//, "") }}
               </a>

@@ -60,3 +60,16 @@ export interface PaginatedResponse<T> {
     to:number;
     total: number;
 }
+export interface RawLink {
+    id:number,
+    short_link:string;
+    full_link:string,
+    views:number;
+    created_at:string;
+    updated_at:string;
+    user_id:number;
+}
+export interface Link extends Omit<RawLink, "created_at" | "updated_at"> {
+    created_at: Date;
+    updated_at: Date;
+}
