@@ -28,8 +28,9 @@ export const useLinks = ({ queries = ref({}) }: UseLinksOptions = {}) => {
             data: data.data.map((i) => adapter(i)),
         })
     }
+    watch(queries, index, { deep: true });
     async function find(id:string | number ) {
-        const {data} = await axios.post<RawLink>(`/${slug}/${id}`);
+        const {data} = await axios.get<RawLink>(`/${slug}/${id}`);
         return (item.value = adapter(data));
     }
     async function create(payload:Partial<Link>) {
@@ -37,7 +38,7 @@ export const useLinks = ({ queries = ref({}) }: UseLinksOptions = {}) => {
         return (item.value = adapter(data));
     }
     async function update(id:string | number, payload:Partial<Link>) {
-        const {data} = await axios.post<RawLink>(`/${slug}/${id}`,payload);
+        const {data} = await axios.put<RawLink>(`/${slug}/${id}`,payload);
         return (item.value = adapter(data));
     }
     async function destroy(id:string|number) {

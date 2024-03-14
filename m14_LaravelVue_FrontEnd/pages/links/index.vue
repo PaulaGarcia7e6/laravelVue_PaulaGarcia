@@ -10,7 +10,7 @@ definePageMeta({
   middleware: ['auth']
 })
 //const data = ref<PaginatedResponse<Link> | null>(null);
-  // const page = ref(useRoute().query.page || 1);
+//const page = ref(useRoute().query.page || 1);
 const queries = ref({
   page: 1,
   sort: "",
@@ -30,13 +30,20 @@ const queries = ref({
 //     console.log('No ha funcionado')
 //   }
 // }
-const {data,index:getLinks} = useLinks({queries})
+const {data,index:getLinks,destroy} = useLinks({queries})
 await getLinks()
-watch(queries, 
-() => useRouter().push({ query: queries.value }),
-{ deep: true });
+// watch(queries, 
+// () => useRouter().push({ query: queries.value }),
+// { deep: true });
 
 let links = computed(() => data.value?.data);
+async function handleDelete(id:number) {
+  await destroy(id)
+  if(data.value) {
+    data.value.data=data.value?.data.filter(link=>link.id!=id)
+  }
+  await getLinks()
+}
 
 </script>
 
@@ -92,7 +99,7 @@ let links = computed(() => data.value?.data);
               </NuxtLink>
             </td>
             <td>
-              <button>
+              <button @click="handleDelete(link.id)">
                 <IconTrash />
               </button>
             </td>
